@@ -1,5 +1,7 @@
 package ru.geekbrains.Algorithms.lesson_two;
 
+import java.util.Arrays;
+
 public class Array {
     private int[] arr;
     private int size;
@@ -52,22 +54,31 @@ public class Array {
 
     // homework
     public boolean delete(int index) {
-        if (size <= 0){
+        if (size <= 0) {
             throw new RuntimeException("Array is empty");
-        }else {
+        } else {
             System.arraycopy(arr, index + 1, arr, index, arr.length - 1 - index);
             size--;
             return true;
         }
     }
-//
+
 //    public boolean deleteAll(int value) {
 //
 //    }
-//
-//    public boolean deleteAll() {
-//
-//    }
+
+
+
+    public boolean deleteAll() {
+        if (size <= 0){
+            throw new RuntimeException("Array is empty");
+        }else {
+            arr = new int[0];
+            size = 0;
+            return true;
+        }
+    }
+
 
     public boolean isInArray(int value) {
         for (int i = 0; i < size; i++) {
