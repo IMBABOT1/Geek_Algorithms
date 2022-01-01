@@ -13,6 +13,7 @@ public class Main {
         return result;
     }
 
+    //O(n)
     private static int findMin(int... arr){
         int min = arr[0];
         for (int i = 0; i < arr.length ; i++) {
@@ -23,7 +24,17 @@ public class Main {
         return min;
     }
 
+    private static double average(int[] arr){
+        double result = 0;
+
+        for (int i = 0; i < arr.length; i++) {
+            result += arr[i];
+        }
+
+        return result / arr.length;
+    }
+
     public static void main(String[] args) {
-        System.out.println(findMin(0, -1223, 8, 3, -567));
+        System.out.println(average(new int[]{1,2,3,5}));
     }
 }
