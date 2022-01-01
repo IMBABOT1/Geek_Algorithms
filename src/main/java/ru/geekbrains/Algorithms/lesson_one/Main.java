@@ -24,6 +24,7 @@ public class Main {
         return min;
     }
 
+    //O(n)
     private static double average(int[] arr){
         double result = 0;
 
@@ -32,9 +33,5 @@ public class Main {
         }
 
         return result / arr.length;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(average(new int[]{1,2,3,5}));
     }
 }
