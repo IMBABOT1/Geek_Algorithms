@@ -1,9 +1,7 @@
 package ru.geekbrains.Algorithms.lesson_two;
 
-import java.util.Arrays;
-
 public class Array {
-    private int[] arr;
+    private int arr[];
     private int size;
     private boolean isSorted;
 
@@ -14,13 +12,13 @@ public class Array {
     public Array(int size) {
         this();
         this.size = 0;
-        arr = new int[size];
+        this.arr = new int[size];
     }
 
-    public Array(int... args) { // int[] args = new int[args.length];
+    public Array(int... args) {
         this();
-        size = args.length;
-        arr = args;
+        this.size = args.length;
+        this.arr = args;
     }
 
     public boolean isSorted() {
@@ -52,43 +50,61 @@ public class Array {
         arr[size++] = value;
     }
 
-    // homework
-    public boolean delete(int index) {
-        if (size <= 0) {
-            throw new RuntimeException("Array is empty");
-        } else {
-            System.arraycopy(arr, index + 1, arr, index, arr.length - 1 - index);
-            size--;
-            return true;
-        }
+    public boolean remove() {
+        if (size == 0)
+            return false;
+        size--;
+        return true;
     }
 
-//    public boolean deleteAll(int value) {
-//
+    boolean remove(int value) {
+        int index = linearFind(value);
+        return index != -1 && delete(index);
+    }
+
+    boolean delete(int index) { // by index
+        if (index >= size || index < 0)
+            throw new ArrayIndexOutOfBoundsException("" + index);
+        System.arraycopy(arr, index + 1, arr, index, size - index - 1);
+        size--;
+        return true;
+    }
+
+//    boolean deleteAll(int value) { // by value
+//        boolean success = false;   //O(N^2)
+//        while (remove(value)) {
+//            success = true;
+//        }
+//        return success;
 //    }
 
-
-
-    public boolean deleteAll() {
-        if (size <= 0){
-            throw new RuntimeException("Array is empty");
-        }else {
-            arr = new int[0];
-            size = 0;
-            return true;
-        }
-    }
-
-
-    public boolean isInArray(int value) {
+    boolean deleteAll(int value) {
+        boolean success = false;
         for (int i = 0; i < size; i++) {
             if (arr[i] == value) {
-                return true;
+                delete(i);
+                i--;
+                success = true;
             }
         }
-        return false;
+        return success;
     }
-    // k << n == k * 2 ^ n
+
+    void deleteAll() { //clear array
+        size = 0;
+    }
+
+    public int linearFind(int value) {
+        for (int i = 0; i < size; i++) {
+            if (arr[i] == value) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    //mid = low + ((value - arr[low]) * (high - low)) / (arr[high] - arr[low]);
+// k << n == k * 2 ^ n
 // k >> n == k / 2 ^ n
     public int find(int value) {
         if (!isSorted)
@@ -118,12 +134,15 @@ public class Array {
     }
 
     public void sortBubble() {
+        boolean flag = false;
         for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size - 1; j++) {
-                if (arr[j] > arr[j + 1])
+            for (int j = 0; j < size - 1 - i; j++) {
+                if (arr[j] > arr[j + 1]) {
                     swap(j, j + 1);
-
+                    flag = true;
+                }
             }
+            if (!flag) break;
         }
         isSorted = true;
     }
@@ -153,7 +172,6 @@ public class Array {
         }
         isSorted = true;
     }
-
     @Override
     public String toString() {
         int iMax = size - 1;
@@ -168,5 +186,40 @@ public class Array {
                 return b.append(']').toString();
             b.append(", ");
         }
+    }
+
+    int getMax() {
+        if (size == 0) throw new RuntimeException("Empty array");
+        if (size == 1) return arr[0];
+        int r = arr[0];
+        for (int i = 1; i < size; i++) {
+            if (r < arr[i])
+                r = arr[i];
+        }
+        return r;
+    }
+
+    int getMin() {
+        if (size == 0) throw new RuntimeException("Empty array");
+        if (size == 1) return arr[0];
+        int r = arr[0];
+        for (int i = 1; i < size; i++) {
+            if (r > arr[i])
+                r = arr[i];
+        }
+        return r;
+    }
+
+    void pigeon() {
+        int min = getMin();
+        int max = getMax();
+        int[] freq = new int[max - min + 1];
+        for (int i = 0; i < size; i++)
+            freq[arr[i] - min]++;
+
+        int arrIndex = 0;
+        for (int i = 0; i < freq.length; i++)
+            for (int elems = freq[i]; elems > 0; elems--)
+                arr[arrIndex++] = i + min;
     }
 }
